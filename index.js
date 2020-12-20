@@ -1,20 +1,45 @@
+class CountdownTimer {
+  constructor({ selector, targetDate }) {
+    this.targetDate = targetDate;
+    this.timer = document.getElementById(selector);
+    this.days = this.timer.querySelector('span[data-value="days"]');
+    this.hours = this.timer.querySelector('span[data-value="hours"]');
+    this.mins = this.timer.querySelector('span[data-value="mins"]');
+    this.secs = this.timer.querySelector('span[data-value="secs"]');
+  }
 
-const days = Math.floor(time / (1000 * 60 * 60 * 24));
-const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-const mins = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
-const secs = Math.floor((time % (1000 * 60)) / 1000);
+  calcTime(time) {
+    const days = this.pad(Math.floor(time / (1000 * 60 * 60 * 24)));
+    const hours = this.pad(
+      Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+    );
+    const mins = this.pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
+    const secs = this.pad(Math.floor((time % (1000 * 60)) / 1000));
+    return { days, hours, mins, secs };
+  }
 
-const refs ={
-    days:document.querySelector('[data-value="days"]'),
-    hours:document.querySelector('[data-value="hours"]'),
-    hours:document.querySelector('[data-value="mins"]'),
-    hours:document.querySelector('[data-value="secs"]'),
-    date: document.querySelector('[data-input]')
+  timerTime() {
+    let time = this.targetDate - Date.now();
+    const { days, hours, mins, secs } = this.calcTime(time);
+    this.days.textContent = days;
+    this.hours.textContent = hours;
+    this.mins.textContent = mins;
+    this.secs.textContent = secs;
+  }
+  pad(value) {
+    return String(value).padStart(2, "0");
+  }
+
+  start() {
+    this.timerTime();
+    setInterval(() => {
+      this.timerTime();
+    }, 1000);
+  }
 }
 
-new CountdownTimer({
-    selector: '#timer-1',
-    targetDate: new Date('Jul 17, 2019'),
-  });
-
-  const inputDate = new Date(refs.date.value)
+const countdownTillNewYear = new CountdownTimer({
+  selector: "timer-1",
+  targetDate: new Date("Jan 1, 2021"),
+});
+countdownTillNewYear.start();
