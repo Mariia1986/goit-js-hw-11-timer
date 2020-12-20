@@ -38,8 +38,8 @@ class CountdownTimer {
   }
 }
 
-const countdownTillNewYear = new CountdownTimer({
+const myTimer = new CountdownTimer({
   selector: "timer-1",
-  targetDate: new Date("Jan 1, 2021"),
+  targetDate: new Date("Jan 1, 2022"),
 });
-countdownTillNewYear.start();
+myTimer.start();
